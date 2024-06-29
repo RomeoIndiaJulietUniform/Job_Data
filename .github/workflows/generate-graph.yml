@@ -1,4 +1,4 @@
-name: Generate Job-Data Graph
+name: Generate Real Time Graph
 
 on:
   push:
@@ -25,10 +25,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytrends matplotlib
 
+      - name: Fetch latest changes from GitHub
+        run: git fetch origin main
+
+      - name: Rebase local changes on top of fetched changes
+        run: git rebase origin/main
+
       - name: Generate Graph
         run: python main.py
 
-      - name: Push changes to GitHub
+      - name: Configure Git and Push Changes
         env:
           PAT: ${{ secrets.PAT }}
         run: |
